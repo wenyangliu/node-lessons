@@ -17,17 +17,10 @@ app.get('/', function (req, res, next) {
                 var $element = $(element);
                 items.push({
                     title: $element.attr('title'),
-                    href: $element.attr('href')
+                    href: $element.attr('href'),
+                    author: $element.parents('.cell').find('img').attr('title')
                 });
             });
-
-            // $('#topic_list .user_avatar img').each(function (idx, element) {
-            //     var $element = $(element);
-            //     items.push({
-            //         author: $element.attr('title')
-            //     });
-            // });
-
             res.send(items);
         })
 }).listen(3000);

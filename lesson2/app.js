@@ -6,13 +6,13 @@ var app = express();
 app.get('/', function (req, res) {
     var q = req.query.q;
 
-    // var md5Value = utility.md5(q);
+    var md5Value = utility.md5(q);
+
+    res.send(md5Value);
+
+    // var sha1Value = utility.sha1(q);
     //
-    // res.send(md5Value);
-
-    var sha1Value = utility.sha1(q);
-
-    res.send(sha1Value);
+    // res.send(sha1Value);
 });
 
 app.listen(3000, function () {

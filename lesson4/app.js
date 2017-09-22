@@ -28,6 +28,31 @@ superagent.get(cnodeUrl)
 
     var ep = new eventproxy();
 
+    var requestAgain = function (url, cb) {
+        request.get(url).end(function (err, res) {
+            if (err || res.statusCode !== 200) {
+                requestAgain(url, cb);
+                return;
+            }
+            cb(res);
+        })
+    }
+
+    topicUrls.forEach(function (topicUrl) {
+        // requestAgain(topicUrl, function (res) {
+        //     console.log('fetch ' + topicUrl + ' ' + res.statusCode);
+        //     ep.emit('topic_html', {
+        //         url: topicUrl,
+        //         res: res
+        //     });
+        // })
+        superagent.get(topicUrl)
+            .end(function (err, res) {
+                console.log('fetch ' + topicUrl + ' successful');
+                ep.emit('topic_html', [topicUrl, res.text]);
+            })
+    })
+
     ep.after('topic_html', topicUrls.length, function (topics) {
 
         topics = topics.map(function (topicPair) {
@@ -46,12 +71,6 @@ superagent.get(cnodeUrl)
         console.log(topics);
     });
 
-    topicUrls.forEach(function (topicUrl) {
-        superagent.get(topicUrl)
-        .end(function (err, res) {
-            console.log('fetch ' + topicUrl + ' successful');
-            ep.emit('topic_html', [topicUrl, res.text]);
-        })
-    })
+
 });
 
